@@ -1,7 +1,7 @@
 {
   "version": "4",
   "specifiers": {
-    "npm:expo-server-sdk@*": "3.11.0"
+    "npm:expo-server-sdk@^3.11.0": "3.11.0"
   },
   "npm": {
     "err-code@2.0.3": {
@@ -47,5 +47,10 @@
         "webidl-conversions"
       ]
     }
+  },
+  "workspace": {
+    "dependencies": [
+      "npm:expo-server-sdk@^3.11.0"
+    ]
   }
 }

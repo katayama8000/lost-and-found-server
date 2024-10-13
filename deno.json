@@ -1,5 +1,7 @@
 {
+    "version": "0.1.1",
+    "license": "MIT",
     "imports": {
-        "expo-server-sdk": "npm:expo-server-sdk"
+        "expo-server-sdk": "npm:expo-server-sdk@^3.11.0"
     }
 }
