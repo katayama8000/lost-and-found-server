@@ -1,0 +1,10 @@
+services:
+  push_notification:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: push_notification
+    volumes:
+      - .:/workspace
+    ports:
+      - "8080:8080"
