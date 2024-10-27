@@ -1,9 +1,16 @@
 {
   "version": "4",
   "specifiers": {
+    "npm:@types/node@*": "22.5.4",
     "npm:expo-server-sdk@^3.11.0": "3.11.0"
   },
   "npm": {
+    "@types/node@22.5.4": {
+      "integrity": "sha512-FDuKUJQm/ju9fT/SeX/6+gBzoPzlVCzfzmGkwKvRHQVxi4BntVbyIwf6a4Xn62mrvndLiml6z/UBXIdEVjQLXg==",
+      "dependencies": [
+        "undici-types"
+      ]
+    },
     "err-code@2.0.3": {
       "integrity": "sha512-2bmlRpNKBxT/CRmPOlyISQpNj+qSeYvcym/uT0Jx2bMOlKLtSy1ZmLuVxSEKKyor/N5yhvp/ZiG1oE3DEYMSFA=="
     },
@@ -37,6 +44,9 @@
     "tr46@0.0.3": {
       "integrity": "sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw=="
     },
+    "undici-types@6.19.8": {
+      "integrity": "sha512-ve2KP6f/JnbPBFyobGHuerC9g1FYGn/F8n1LWTwNxCEzd6IfqTwUQcNXgEtmmQ6DlRrC1hrSrBnCZPokRrDHjw=="
+    },
     "webidl-conversions@3.0.1": {
       "integrity": "sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ=="
     },
@@ -47,6 +57,10 @@
         "webidl-conversions"
       ]
     }
+  },
+  "remote": {
+    "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js": "1bf8ff3370c8cece9a4d59516262b8790c0ef5f7a33c09259ef3f895a70b9a95",
+    "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js": "297751665b86ed4738798e1d497c377df2e354593b76ecd878d906f4ce930f11"
   },
   "workspace": {
     "dependencies": [
