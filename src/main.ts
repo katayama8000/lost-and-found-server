@@ -1,5 +1,5 @@
 import { Expo } from "expo-server-sdk";
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
 import {
     addDoc,
     collection,
@@ -10,7 +10,7 @@ import {
     query,
     setDoc,
     where,
-} from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 import { tripId, userId } from "./constant.ts";
 import type { Item } from "../types/item.ts";
 
@@ -46,7 +46,7 @@ const fetchItems = async (): Promise<Item[]> => {
     return items.docs.map((item) => item.data()) as Item[];
 };
 
-// fetchPushToken();
+fetchPushToken();
 fetchItems();
 
 // const expo = new Expo();
@@ -72,5 +72,3 @@ fetchItems();
 //         console.error(error);
 //     }
 // });
-
-// Deno.serve((_req) => new Response("Hello, world!!!"));

@@ -59,6 +59,8 @@
     }
   },
   "remote": {
+    "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js": "19f05d67deadb1a1fba077c18611c3c9b2fdd5b4ebbd0a5e391498925ebae23e",
+    "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js": "39bd17897082983e072d4b99caa2ca2f2fbf9eac644bc613ff93cf59a9646b46",
     "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js": "1bf8ff3370c8cece9a4d59516262b8790c0ef5f7a33c09259ef3f895a70b9a95",
     "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js": "297751665b86ed4738798e1d497c377df2e354593b76ecd878d906f4ce930f11"
   },
