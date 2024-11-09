@@ -2,10 +2,19 @@ name: Deploy
 on:
   push:
     branches:
-      - "main"
+      - "*"
   pull_request:
     branches:
-      - "main"
+      - "*"
+  workflow_dispatch:
+    inputs:
+      cron_action:
+        description: "Enable or disable cron job"
+        required: true
+        default: "enable"
+        options:
+          - enable
+          - disable
 
 jobs:
   deploy:
@@ -24,6 +33,16 @@ jobs:
         uses: denoland/setup-deno@v2
         with:
           deno-version: v2.x
+
+      - name: Set Environment Variable for Cron Job
+        if: ${{ github.event.inputs.cron_action == 'enable' || github.event.inputs.cron_action == 'disable' }}
+        run: |
+          if [ "${{ github.event.inputs.cron_action }}" == "enable" ]; then
+            deno deploy --project "katayama800-push-notifi-92" --env CRON_ENABLED=true
+          else
+            deno deploy --project "katayama800-push-notifi-92" --env CRON_ENABLED=false
+          fi
+        shell: bash
 
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
