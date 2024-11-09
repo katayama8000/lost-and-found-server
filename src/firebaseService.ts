@@ -1,5 +1,3 @@
-console.log("Hello, Deno!");
-import { Expo } from "expo-server-sdk";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
 import {
     collection,
@@ -8,6 +6,7 @@ import {
     getDocs,
     getFirestore,
     query,
+    setDoc,
     where,
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 import { tripId, userId } from "./constant.ts";
@@ -22,25 +21,28 @@ const firebaseConfig = {
     appId: "1:844445487537:web:a8c833490200eb085e2d90",
 };
 
-// Initialize Firebase and Firestore
 const firebaseApp = initializeApp(firebaseConfig);
 const db = getFirestore(firebaseApp);
 
-// Initialize Expo SDK for push notifications
-export const expo = new Expo();
-
-// Fetch the push token for the user
 export const fetchPushToken = async (): Promise<string | null> => {
     try {
         const userDoc = await getDoc(doc(db, "users", userId));
-        return userDoc.exists() ? (userDoc.data().pushToken as string) : null;
+        if (!userDoc.exists()) {
+            console.warn(`User document for userId ${userId} does not exist.`);
+            return null;
+        }
+        const data = userDoc.data();
+        if (!data || !data.pushToken) {
+            console.warn("Push token not found in user document.");
+            return null;
+        }
+        return data.pushToken as string;
     } catch (error) {
         console.error("Error fetching push token:", error);
         return null;
     }
 };
 
-// Fetch items with notifications enabled for the current trip
 export const fetchItemsWithNotificationsEnabled = async (): Promise<Item[]> => {
     try {
         const itemsSnapshot = await getDocs(
@@ -49,6 +51,10 @@ export const fetchItemsWithNotificationsEnabled = async (): Promise<Item[]> => {
                 where("isNotifyEnabled", "==", true),
             ),
         );
+        if (itemsSnapshot.empty) {
+            console.log("No items found with notifications enabled.");
+            return [];
+        }
         return itemsSnapshot.docs.map((doc) => doc.data()) as Item[];
     } catch (error) {
         console.error("Error fetching items from Firestore:", error);
@@ -56,38 +62,21 @@ export const fetchItemsWithNotificationsEnabled = async (): Promise<Item[]> => {
     }
 };
 
-// Check if an item needs to be notified based on lastNotifiedAt and reminderInterval
-export const shouldNotify = (
-    lastNotifiedAt: string | null,
-    reminderInterval: number,
-): boolean => {
-    if (!lastNotifiedAt) return true;
-    const now = Date.now();
-    const lastNotifiedTime = new Date(lastNotifiedAt).getTime();
-    return now - lastNotifiedTime >= reminderInterval;
-};
-
-// Send push notifications for items that need reminders
-export const sendPushNotification = async (
-    pushToken: string,
-    items: Item[],
-) => {
-    const messages = [{
-        to: pushToken,
-        title: "YOU HAVE TO CHECK THIS OUT",
-        body: `${
-            items.map((item) => item.name).join(", ")
-        } might be lost. Please check.`,
-        data: {
-            ids: items.map((item) => item.id),
-        },
-    }];
+export const updateLastNotifiedAt = async (item: Item): Promise<void> => {
+    const todayInJST = new Date(Date.now() + 9 * 60 * 60 * 1000);
     try {
-        const chunks = expo.chunkPushNotifications(messages);
-        for (const chunk of chunks) {
-            await expo.sendPushNotificationsAsync(chunk);
-        }
+        await setDoc(
+            doc(db, "users", userId, "trips", tripId, "items", item.id),
+            {
+                ...item,
+                lastNotifiedAt: todayInJST.toISOString(),
+            },
+        );
+        console.log(`Updated lastNotifiedAt for item ${item.id}.`);
     } catch (error) {
-        console.error("Error sending push notifications:", error);
+        console.error(
+            `Error updating last notified time for item ${item.id}:`,
+            error,
+        );
     }
 };
