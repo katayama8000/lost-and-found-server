@@ -1,4 +1,4 @@
-import { Expo } from "expo-server-sdk";
+import { Expo } from "npm:expo-server-sdk";
 import type { Item } from "../types/item.ts";
 import {
     fetchItemsWithNotificationsEnabled,
