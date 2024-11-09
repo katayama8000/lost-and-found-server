@@ -44,7 +44,7 @@ export const sendPushNotification = async (
     }
 };
 
-const main = async () => {
+export const run = async () => {
     try {
         // Retrieve the push token for the user and validate it
         const pushToken = await fetchPushToken();
@@ -89,6 +89,6 @@ const main = async () => {
 };
 
 // Execute the main function and handle any uncaught errors
-main().catch((error) => {
+run().catch((error) => {
     console.error("An unhandled error occurred:", error);
 });
