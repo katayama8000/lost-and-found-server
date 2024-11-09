@@ -4,5 +4,7 @@ export type Item = {
     lastNotifiedAt: string | null;
     name: string;
     reminderInterval: number;
-    status: string;
+    status: string | null;
+} & {
+    id: string;
 };

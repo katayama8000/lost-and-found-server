@@ -27,10 +27,10 @@ const firebaseApp = initializeApp(firebaseConfig);
 const db = getFirestore(firebaseApp);
 
 // Initialize Expo SDK for push notifications
-const expo = new Expo();
+export const expo = new Expo();
 
 // Fetch the push token for the user
-const fetchPushToken = async (): Promise<string | null> => {
+export const fetchPushToken = async (): Promise<string | null> => {
     try {
         const userDoc = await getDoc(doc(db, "users", userId));
         return userDoc.exists() ? (userDoc.data().pushToken as string) : null;
@@ -41,7 +41,7 @@ const fetchPushToken = async (): Promise<string | null> => {
 };
 
 // Fetch items with notifications enabled for the current trip
-const fetchItemsWithNotificationsEnabled = async (): Promise<Item[]> => {
+export const fetchItemsWithNotificationsEnabled = async (): Promise<Item[]> => {
     try {
         const itemsSnapshot = await getDocs(
             query(
@@ -57,7 +57,7 @@ const fetchItemsWithNotificationsEnabled = async (): Promise<Item[]> => {
 };
 
 // Check if an item needs to be notified based on lastNotifiedAt and reminderInterval
-const shouldNotify = (
+export const shouldNotify = (
     lastNotifiedAt: string | null,
     reminderInterval: number,
 ): boolean => {
@@ -68,7 +68,10 @@ const shouldNotify = (
 };
 
 // Send push notifications for items that need reminders
-const sendPushNotification = async (pushToken: string, items: Item[]) => {
+export const sendPushNotification = async (
+    pushToken: string,
+    items: Item[],
+) => {
     const messages = [{
         to: pushToken,
         title: "YOU HAVE TO CHECK THIS OUT",
@@ -88,50 +91,3 @@ const sendPushNotification = async (pushToken: string, items: Item[]) => {
         console.error("Error sending push notifications:", error);
     }
 };
-
-// Scheduled job to check and send notifications every hour
-// Deno.cron("Push notification", "0 * * * *", async () => {
-//     const pushToken = await fetchPushToken();
-//     if (!pushToken || !Expo.isExpoPushToken(pushToken)) return;
-
-//     const items = await fetchItemsWithNotificationsEnabled();
-//     if (items.length === 0) return;
-
-//     // Filter items that need to be notified based on their last notified time and interval
-//     const itemsToNotify = items.filter((item) =>
-//         shouldNotify(item.lastNotifiedAt, item.reminderInterval)
-//     );
-
-//     if (itemsToNotify.length > 0) {
-//         await sendPushNotification(pushToken, itemsToNotify);
-//     }
-// });
-
-const main = async () => {
-    const pushToken = await fetchPushToken();
-    if (!Expo.isExpoPushToken(pushToken)) {
-        console.error("Invalid push token:", pushToken);
-        return;
-    }
-
-    const items = await fetchItemsWithNotificationsEnabled();
-    if (items.length === 0) {
-        console.log("No items found with notifications enabled.");
-        return;
-    }
-
-    console.log("Fetched items:", items);
-
-    // Filter items that need to be notified based on their last notified time and interval
-    const itemsToNotify = items.filter((item) =>
-        shouldNotify(item.lastNotifiedAt, item.reminderInterval)
-    );
-
-    if (itemsToNotify.length > 0) {
-        await sendPushNotification(pushToken, itemsToNotify);
-    }
-};
-
-main().catch((error) => {
-    console.error("An error occurred:", error);
-});
