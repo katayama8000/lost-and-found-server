@@ -1,11 +1,5 @@
-name: Deploy
+name: Manual Deploy with Logging
 on:
-  push:
-    branches:
-      - "*"
-  pull_request:
-    branches:
-      - "*"
   workflow_dispatch:
     inputs:
       cron_action:
@@ -18,7 +12,7 @@ on:
 
 jobs:
   deploy:
-    name: Deploy
+    name: Deploy with Logging
     runs-on: ubuntu-latest
 
     permissions:
@@ -28,25 +22,42 @@ jobs:
     steps:
       - name: Clone repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Log selected cron action
+        run: echo "Selected cron action: ${{ github.event.inputs.cron_action }}"
 
       - name: Install Deno
         uses: denoland/setup-deno@v2
         with:
           deno-version: v2.x
 
-      - name: Set Environment Variable for Cron Job
-        if: ${{ github.event.inputs.cron_action == 'enable' || github.event.inputs.cron_action == 'disable' }}
+      - name: Build Project
+        run: |
+          echo "Building the project..."
+          deno task build
+        continue-on-error: true
+
+      - name: Set Cron Job Environment Variable
         run: |
           if [ "${{ github.event.inputs.cron_action }}" == "enable" ]; then
-            deno deploy --project "katayama800-push-notifi-92" --env CRON_ENABLED=true
+            echo "Setting CRON_ENABLED=true"
+            echo "CRON_ENABLED=true" >> $GITHUB_ENV
           else
-            deno deploy --project "katayama800-push-notifi-92" --env CRON_ENABLED=false
+            echo "Setting CRON_ENABLED=false"
+            echo "CRON_ENABLED=false" >> $GITHUB_ENV
           fi
-        shell: bash
 
-      - name: Upload to Deno Deploy
+      - name: Log CRON_ENABLED value
+        run: echo "CRON_ENABLED is set to ${{ env.CRON_ENABLED }}"
+
+      - name: Deploy to Deno Deploy
+        if: always()
         uses: denoland/deployctl@v1
         with:
           project: "katayama800-push-notifi-92"
           entrypoint: "main.ts"
           root: "src/"
+        env:
+          CRON_ENABLED: ${{ env.CRON_ENABLED }}
