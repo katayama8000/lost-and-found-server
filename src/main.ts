@@ -1,7 +1,7 @@
 import { run } from "./sendPushNotifications.ts";
 
 // Scheduled job to check and send notifications every hour
-if (false) {
+if (true) {
     Deno.cron("Push notification", "0 * * * *", async () => {
         console.log("Running scheduled job to send push notifications...");
         try {
