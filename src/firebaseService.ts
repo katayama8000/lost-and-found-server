@@ -55,7 +55,13 @@ export const fetchItemsWithNotificationsEnabled = async (): Promise<Item[]> => {
             console.log("No items found with notifications enabled.");
             return [];
         }
-        return itemsSnapshot.docs.map((doc) => doc.data()) as Item[];
+        return itemsSnapshot.docs.map((doc) => {
+            const data = doc.data();
+            return {
+                ...data,
+                id: doc.id,
+            };
+        }) as Item[];
     } catch (error) {
         console.error("Error fetching items from Firestore:", error);
         return [];

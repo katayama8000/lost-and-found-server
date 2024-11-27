@@ -69,6 +69,8 @@ export const run = async () => {
         if (itemsToNotify.length > 0) {
             await sendPushNotification(pushToken, itemsToNotify);
             console.log("Push notification sent.");
+        } else {
+            console.log("No items to notify.");
         }
 
         // Update lastNotifiedAt for each item that was notified

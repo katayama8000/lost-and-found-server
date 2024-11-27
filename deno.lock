@@ -2,7 +2,7 @@
   "version": "4",
   "specifiers": {
     "npm:@types/node@*": "22.5.4",
-    "npm:expo-server-sdk@^3.11.0": "3.11.0"
+    "npm:expo-server-sdk@*": "3.12.0"
   },
   "npm": {
     "@types/node@22.5.4": {
@@ -14,8 +14,8 @@
     "err-code@2.0.3": {
       "integrity": "sha512-2bmlRpNKBxT/CRmPOlyISQpNj+qSeYvcym/uT0Jx2bMOlKLtSy1ZmLuVxSEKKyor/N5yhvp/ZiG1oE3DEYMSFA=="
     },
-    "expo-server-sdk@3.11.0": {
-      "integrity": "sha512-EGH82ZcdAFjKq+6daDE8Xj7BjaSeP1VDvZ3Hmtn/KzEQ3ffqHkauMsgXL2wLEPlvatLq3EsYNcejXRBV54WnFQ==",
+    "expo-server-sdk@3.12.0": {
+      "integrity": "sha512-A3S78NLdOfWn69kx+gMhO83wemcfQ5w7ntkXH+cFWwyLmaNGbfzpb1HqgTKLwd+BmFf6cf+FgltAaTHbl8G9QA==",
       "dependencies": [
         "node-fetch",
         "promise-limit",
@@ -63,10 +63,5 @@
     "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js": "39bd17897082983e072d4b99caa2ca2f2fbf9eac644bc613ff93cf59a9646b46",
     "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js": "1bf8ff3370c8cece9a4d59516262b8790c0ef5f7a33c09259ef3f895a70b9a95",
     "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js": "297751665b86ed4738798e1d497c377df2e354593b76ecd878d906f4ce930f11"
-  },
-  "workspace": {
-    "dependencies": [
-      "npm:expo-server-sdk@^3.11.0"
-    ]
   }
 }
